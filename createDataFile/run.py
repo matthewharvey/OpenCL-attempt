@@ -5,7 +5,7 @@ import random
 #sizes = [20, 40, 80, 160, 320, 640]
 #buffers = [1, 2, 4, 8, 10]
 #iterations = 200
-x = 700
+x = 7000
 y = 8000
 
 results = open("random.txt", "w+")

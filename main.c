@@ -19,6 +19,7 @@ int g_maxX, g_minX, g_maxY, g_minY;
 void inline DataBufferInit(int size)
 {
 	g_data_buffer = (Point*)malloc(size*sizeof(Point));
+	assert(g_data_buffer);
 }
 
 void ReadFileData(char* filename)
@@ -82,9 +83,16 @@ void DoCalculations()
 #ifdef OPENCL
 #else
 	int i;
-	for (i = 0; i < g_maxX*g_maxY; i++)
+	for (i = 0; i < g_maxX*g_maxY - 1; i++)
 	{
-		g_data_buffer[i].elevation = sqrt(g_data_buffer[i].elevation);
+		double average = 0;
+		average += g_data_buffer[i-1].elevation;
+		average += g_data_buffer[i+1].elevation;
+		average /= 2.0;
+		if (abs(g_data_buffer[i].elevation - average) > 12.0)
+			g_data_buffer[i].elevation = average;
+		else
+			g_data_buffer[i].elevation = sqrt(g_data_buffer[i].elevation);
 	}
 #endif //OPENCL
 }
